@@ -7,5 +7,7 @@
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 31.9053, 38.7165 )
+collision/safe_margin = 1.188
 
 [node name="screen_borders" parent="." instance=ExtResource( 3 )]
+process_priority = 1
