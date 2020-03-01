@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://environment/screen_borders.gd" type="Script" id=1]
+
+[sub_resource type="PhysicsMaterial" id=1]
+
+[sub_resource type="SegmentShape2D" id=2]
+b = Vector2( 150, 0 )
+
+[sub_resource type="SegmentShape2D" id=3]
+b = Vector2( 150, 0 )
+
+[sub_resource type="SegmentShape2D" id=4]
+b = Vector2( 0, 150 )
+
+[sub_resource type="SegmentShape2D" id=5]
+b = Vector2( 0, 150 )
+
+[node name="screen_borders" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="top_border" type="StaticBody2D" parent="."]
+physics_material_override = SubResource( 1 )
+
+[node name="top_segment_shape" type="Polygon2D" parent="top_border"]
+color = Color( 0.871094, 0.0986786, 0.189196, 1 )
+polygon = PoolVector2Array( -0.0330162, -1.46879, 149.755, -1.25944, 149.86, 1.88078, 0.071661, 1.88078 )
+
+[node name="top_segment_collision" type="CollisionShape2D" parent="top_border"]
+position = Vector2( -7.62939e-06, 0.244167 )
+shape = SubResource( 2 )
+
+[node name="bottom_border" type="StaticBody2D" parent="."]
+
+[node name="bottom_segment_shape" type="Polygon2D" parent="bottom_border"]
+color = Color( 0.886275, 0.0156863, 0.117647, 1 )
+polygon = PoolVector2Array( -0.0330162, -1.46879, 149.755, -1.25944, 149.86, 1.88078, 0.071661, 1.88078 )
+
+[node name="bottom_segment_collision" type="CollisionShape2D" parent="bottom_border"]
+shape = SubResource( 3 )
+
+[node name="left_border" type="StaticBody2D" parent="."]
+
+[node name="left_segment_shape" type="Polygon2D" parent="left_border"]
+rotation = 1.5708
+color = Color( 0.871094, 0.0986786, 0.189196, 1 )
+polygon = PoolVector2Array( -0.0330162, -1.46879, 149.755, -1.25944, 149.86, 1.88078, 0.071661, 1.88078 )
+
+[node name="left_segment_collision" type="CollisionShape2D" parent="left_border"]
+shape = SubResource( 4 )
+
+[node name="right_border" type="StaticBody2D" parent="."]
+
+[node name="right_segment_shape" type="Polygon2D" parent="right_border"]
+rotation = 1.5708
+color = Color( 0.871094, 0.0986786, 0.189196, 1 )
+polygon = PoolVector2Array( -0.0330162, -1.46879, 149.821, -1.259, 149.86, 1.88078, 0.071661, 1.88078 )
+
+[node name="right_segment_collision" type="CollisionShape2D" parent="right_border"]
+shape = SubResource( 5 )

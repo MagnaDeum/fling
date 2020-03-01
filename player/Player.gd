@@ -1,4 +1,4 @@
-extends Area2D
+extends KinematicBody2D
 
 
 ### constants ###
@@ -16,7 +16,6 @@ var gravity_velocity = 1
 
 var velocity
 var jumping
-var groundY
 
 
 ### constructor ###
@@ -25,28 +24,29 @@ func _init():
 	pass
 
 
-
 ### functions ###
 
 func _ready():
 	screen_size = get_viewport_rect().size
 	collisionSize = $CollisionShape2D.get_shape().get_extents()
 	position.x = 10 + collisionSize.x
-	position.y = screen_size.y - collisionSize.y
-	groundY = screen_size.y - collisionSize.y
+	position.y = screen_size.y - collisionSize.x
 
 
-func _process(delta):
-	velocity = Vector2() # resets velocity every frame
-	player_control(delta)
+func _physics_process(delta):
+	get_input(delta)
+	velocity_modifiers(delta)
 	player_animation()
-	gravity()
-	set_position_with_speed(delta)
+	var collision = move_and_collide(velocity)
+	if collision :
+		velocity = 0
+	
 
 
-func player_control(delta):
-	# for some reason, groundY is slightly smaller than position (probably clamps fault)
-	if position.y > groundY-1 :
+func get_input(delta):
+	velocity = Vector2() # resets velocity every frame
+	
+	if is_on_floor():
 		jumping = false
 	
 	if Input.is_action_pressed("ui_right"):
@@ -54,7 +54,7 @@ func player_control(delta):
 	if Input.is_action_pressed("ui_left"):
 		velocity.x -= 1
 	if Input.is_action_pressed("ui_jump"):
-		if !jumping :
+		if is_on_floor() :
 			jump()
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
@@ -67,32 +67,29 @@ func player_animation():
 			$AnimatedSprite.animation = "right"
 		elif velocity.x < 0:
 			$AnimatedSprite.animation = "left"
-		
 	else:
 		$AnimatedSprite.stop()
 
 
-func set_position_with_speed(delta):
-	# set with speed
-	position += velocity * delta
+func velocity_modifiers(delta):
+	# set with frame data
+	velocity = velocity * delta
 	
 	# jump speed
 	var jump_speed = jump_vector.y/10
 	if jumping :
-		position.y -= jump_speed
+		velocity.y -= jump_speed
 		jump_vector.y -= jump_speed
 	
 	# add gravity
-	position.y += gravity_velocity
+	gravity()
+	velocity.y += gravity_velocity
 	
-	# clamp to screen
-	position.x = clamp(position.x, 0 + collisionSize.x, screen_size.x - collisionSize.x)
-	position.y = clamp(position.y, 0 + collisionSize.y, groundY)
 
 
 func gravity():
 	# gravity logic
-	if jumping:
+	if !is_on_floor():
 		gravity_velocity += gravity_velocity * gravity_factor
 	else:
 		gravity_velocity = 1

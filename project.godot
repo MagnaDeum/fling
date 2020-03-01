@@ -16,11 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="fling"
+run/main_scene="res://game/map1.tscn"
 
 [display]
 
-window/size/width=1280
-window/size/height=1024
+window/size/width=1920
+window/size/height=1080
 
 [input]
 
